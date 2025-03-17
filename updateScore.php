@@ -36,8 +36,14 @@ $updateUser->execute([
     'score' => $score,
     'identifiant' => $id
 ]);
+echo "Score mis à jour avec succès !";
 echo '<script>
 console.log("succes update score");
+(function() {
+    setTimeout(function() {
+        window.location = "index.php";
+    }, 2000);
+})();
 </script>';
  
 } else {

@@ -18,6 +18,10 @@
             document.getElementById("connecté").innerHTML += "Bienvenue " + localStorage.getItem('user-id');
             document.getElementById("connecté").style.display = "flex";
             document.getElementById("btn-jouer").style.display = "flex";
+            localStorage.setItem("image", 1);
+            localStorage.setItem("score", 0);
+            localStorage.setItem("imageTerminés", 0);
+            localStorage.setItem("nomImg", "");
 }
 else {
     document.getElementById("pas-de-compte").style.display = "flex";
@@ -32,7 +36,16 @@ else {
 
 </div>
 <div class="btn-jouer" id="btn-jouer"  style="display:none;">
-    <button class="jouer"  onclick="window.location='image.html';">jouer</button>
+    <script>
+        function lancerLeJeu() {
+            window.location = "image.php";
+            localStorage.setItem("image", 0);
+            localStorage.setItem("score", 0);
+            localStorage.setItem("imageTerminés", 0);
+            localStorage.setItem("nombreAléatoire", "[]");
+        }
+    </script>
+    <button class="jouer"  onclick="lancerLeJeu()">jouer</button>
 </div>
 
 </body>

@@ -15,4 +15,4 @@ if ($stmt->execute(['id' => $id, 'mdp' => $mdp])) {
     echo "Erreur lors de la création du compte.";
 }
 
-echo '<a href="carte.html">Retour à la carte</a>';
+echo '<a href="login.php">maintenant vous pouvez vous connecter</a>';

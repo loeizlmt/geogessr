@@ -12,13 +12,48 @@
 </head>
 
 <body>
-<div class="carte">
+<div class="">
     <div id="map" class="map"></div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+
+        });
+        const imgGPSLat = {
+            0: "49.545176",   
+            1: "49.545403",
+            2: "49.547440", 
+            3: "49.545797",
+            4: "49.546859",
+            5: "49.546540", 
+            6: "49.546391",
+            7: "49.546098",
+            8: "49.545780",
+
+
+        };
+        const imgGPSLon = {
+            0: "0.178206",
+            1: "0.178290",
+            2: "0.181712",
+            3: "0.179794",
+            4: "0.181077",
+            5: "0.181166",
+            6: "0.180909",
+            7: "0.180740",
+            8: "0.179783",
+
+        };
         cliqué = false;
-        coordimglat = 49.545211;
-        coordimglon = 0.178190;
+        image = localStorage.getItem("image");
+        console.log(localStorage.getItem("image"));
+        image = parseInt(image, 10);
+        console.log(image);
+        coordimglat = imgGPSLat[image];
+        coordimglon = imgGPSLon[image];
+        console.log(coordimglat);
+        console.log(coordimglon);
 
         var map = L.map('map').setView([49.545845967044144, 0.17996785139144494], 17);
         L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
@@ -29,13 +64,30 @@
         var popup = L.popup();
 
         function onMapClick(e) {
+            imgTerminés = localStorage.getItem("imageTerminés");
+            imgTerminés = parseInt(imgTerminés, 10);
+            localStorage.setItem("imageTerminés", imgTerminés+1);
+            fini = localStorage.getItem("imageTerminés");
+            fini = parseInt(fini, 10);
+            if (fini == 9){
+                document.getElementById("suivant").style.display = 'none';
+                document.getElementById("mettre-score-dans-bdd").style.display = 'flex';
+                id = localStorage.getItem("user-id");
+                password = localStorage.getItem("user-password");
+                document.getElementById("identifiant").value = id;
+                document.getElementById("mdp").value = password;
+                fini1 = true
+                
+                }
+
+
             cliqué = true;
             coordlat = e.latlng.lat;
             coordlon = e.latlng.lng;
             distanceimg = Distance(coordimglat, coordimglon, coordlat, coordlon);
 
             // distance < 1 = 100
-            if (distanceimg < 1) {
+            if (distanceimg < 1.5) {
                 score = 100;
             }
             // distance > 1 = -2pts par mètre
@@ -52,7 +104,32 @@
                     document.getElementById("map").style.display = 'none';
                 }
             }
+
+            function affichageScore1() {
+                document.getElementById("affichageScore1").innerText = "Score : " + score;
+                if (cliqué) {
+                    document.getElementById("map").style.display = 'none';
+                }
+            }
+            affichageScore1();
             affichageScore();
+            scoreLocal = localStorage.getItem("score");
+                scoreLocal = parseInt(scoreLocal, 10);
+                score = parseInt(score, 10);
+                scoreAdd = scoreLocal+score;
+                localStorage.setItem("score", scoreAdd);
+                console.log(localStorage.getItem("score"));
+
+                fini = localStorage.getItem("imageTerminés");
+                fini = parseInt(fini, 10);
+                if (fini == 9){
+                    scoreFin = localStorage.getItem("score");
+                    scoreFin = parseInt(scoreFin, 10);
+                    scoreFin = (scoreFin/900)*100;
+                    document.getElementById("scoreInput").value = scoreFin;
+                    console.log("fini");
+                };
+
         }
 
         map.on('click', onMapClick);
@@ -77,8 +154,7 @@
             return d;
         }
     </script>
-
-    <form action="updateScore.php" method="POST">
+    <form id="mettre-score-dans-bdd" action="updateScore.php" method="POST" style="display: none;">
         <p id="affichageScore">Score : 0</p>
         <input type="hidden" name="score" id="scoreInput" value="">
         <input type="hidden" name="identifiant" id="identifiant" >
@@ -86,20 +162,42 @@
         
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                id = localStorage.getItem("user-id");
-                password = localStorage.getItem("user-password");
-                document.getElementById("identifiant").value = id;
-                document.getElementById("mdp").value = password;
+
             });
+  
+            function suivant() {
+                var image = localStorage.getItem("image");
+                image = parseInt(image, 10);
+                localStorage.setItem("image", image+1);
+                window.location.href='image.php';
+            }
+
+
             function updateScore() {
+
                 event.preventDefault();
-                document.getElementById("scoreInput").value = score;
                 document.querySelector("form").submit();
+
+                var image = localStorage.getItem("image");
+                image = parseInt(image, 10);
+                localStorage.setItem("image", image+1);
+
+                if (fini1){
+                    scoreFin = localStorage.getItem("score");
+                    scoreFin = scoreFin.toFixed(2);
+                    document.getElementById("scoreInput").value = scoreFin;
+                    console.log("fini");
+                };
+                
+
             }
         </script>
-
         <input type="submit" value="Valider" onclick="updateScore()">
     </form>
+    <div id="suivant" style="display: flex;">
+        <p id="affichageScore1">Score : 0</p>
+        <button onclick="suivant()">Suivant</button>
+    </div>
 </div>
 
 

@@ -1,6 +1,6 @@
 # 🎯 GeoGuessr - Lycée Jean Prévost
 
-![Présentation du jeu](présentation.png)
+![image](présentation.png)
 
 Bienvenue dans *GeoGuessr - Lycée Jean Prévost*, une version personnalisée du célèbre jeu GeoGuessr, créée autour de mon lycée à Montivilliers. Le but ? Retrouver l’endroit exact où une photo a été prise dans l’établissement en observant les détails autour de toi !
 

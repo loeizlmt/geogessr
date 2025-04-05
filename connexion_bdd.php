@@ -1,7 +1,5 @@
 <?php
-    $mysqlClient = new PDO(
-        'mysql:host=sql300.infinityfree.com;dbname=if0_38513949_geogessr;charset=utf8',
-        'if0_38513949',
-        'KVApzt0Mmrvx7Pt'
-    );
-?>
+	// on crée uen connexion à la base de données sqlite qui est date.sqlite
+	$mysqlClient = new PDO('sqlite:' . __DIR__ . '/data.sqlite');
+	// on n'affiche pas les erreurs pour éviter les problèmes de sécurité
+	$mysqlClient->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);

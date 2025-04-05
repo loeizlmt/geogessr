@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>  
+<head> 
+    <meta charset="UTF-8"> 
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Créer un compte</title>       
 
 </head>
 
 <body>
-    <form action="créer_compte.php" method="POST">
+    <header>
+        <button class="btn-logout" onclick="window.location='logout.php';" >déconnexion</button>
+        <div class="h1-header">
+            <h1 class="titre-header" >geoguessr</h1>
+            </div>
+        </header>
+    <!-- formulaire pour créer un compte-->
+    <form class="créer-compte" action="créer_compte.php" method="POST">
         <input type="text" name="identifiant" placeholder="identifiant">
-        <input type="text" name="mot-de-passe" placeholder="Mot de passe">
-        <input type="submit" value="Valider">
+        <input type="password" name="mot-de-passe" placeholder="Mot de passe">
+        <input class="btn-créer-compte" type="submit" value="Valider">
     </form>    
 
 </body>

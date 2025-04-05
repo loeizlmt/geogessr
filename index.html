@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+<script type="module" src="script.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <title>geogessr</title>
+    <title>geoguessr</title>
 </head>
-<body>
+<body id="body">
     <header>
     <button class="btn-logout" onclick="window.location='logout.php';" >déconnexion</button>
     <div class="h1-header">
-        <h1 class="titre-header">geogessr</h1>
+        <h1 class="titre-header">geoguessr</h1>
         </div>
     </header>
 
-    <script>
+    <script type="module">
+            import { APchangement } from "./script.js";
+
+        // vérifie si l'utilisateur est connecté
         document.addEventListener('DOMContentLoaded', function() {
+            // si l'utilisateur est connecté, affiche bienvenue, le bouton jouer
+            // et initialise les cookies qui seront utiles pour la suite.
             if(localStorage.getItem('user-id')) {
             document.getElementById("connecté").innerHTML += "Bienvenue " + localStorage.getItem('user-id');
             document.getElementById("connecté").style.display = "flex";
@@ -22,8 +29,10 @@
             localStorage.setItem("score", 0);
             localStorage.setItem("imageTerminés", 0);
             localStorage.setItem("nomImg", "");
+            APchangement();
 }
 else {
+    // si l'utilisateur n'est pas connecté, affiche un message qui lui permet de créer un compte ou de se connecter
     document.getElementById("pas-de-compte").style.display = "flex";
 }
         });
@@ -37,8 +46,9 @@ else {
 </div>
 <div class="btn-jouer" id="btn-jouer"  style="display:none;">
     <script>
+        // fonction qui permet de lancer le jeu et de réinitialiser les cookies
         function lancerLeJeu() {
-            window.location = "image.php";
+            window.location = "image.html";
             localStorage.setItem("image", 0);
             localStorage.setItem("score", 0);
             localStorage.setItem("imageTerminés", 0);
@@ -46,7 +56,25 @@ else {
         }
     </script>
     <button class="jouer"  onclick="lancerLeJeu()">jouer</button>
+    <a href="tableau-score.php"><button class="jouer">tableau-score</button></a>
+    <div class="règles">
+        <h2>Règles du jeu</h2>
+        <p>Vous allez devoir deviner le lieu où vous vous trouvez en cliquant sur la carte du lycée.
+            <br> 
+            Plus vous vous rapprochez du lieu exact, plus vous gagnez de points. 
+            <br>
+            Si vous êtes à moins de 1.5 mètres du lieu exact, vous gagnez 100 points. 
+            <br>
+            Sinon vous perdez 2 point tous les 1 mètres de distance avec le lieu. 
+            <br>
+            Il y a 32 lieux à trouver, vous pouvez donc gagner jusqu'a 32 000 points 
+            <br>
+            qui seront remis sur 100 avant d'être envoyé dans le tableau des scores.
+            <br>
+            Bonne chance !</p>
+    </div>
 </div>
-
+<script>
+</script>
 </body>
 </html>

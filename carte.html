@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
-    <title>geogessr</title>
+    <title>geoguessr</title>
+    <!-- récupère les données nécessaires à leaflet pour la carte -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
@@ -12,27 +14,51 @@
 </head>
 
 <body>
-<div class="">
+<div>
+    <!-- div qui va accueillir la carte leaflet-->
     <div id="map" class="map"></div>
 
     <script>
+        // au chargement de la page :
         document.addEventListener("DOMContentLoaded", function() {
-
-
         });
+        // on crée deux tableaux qui contiennent les coordonnées GPS des images
+        // un avec les latitudes et un avec les longitudes
         const imgGPSLat = {
-            0: "49.545176",   
+            0: "49.545176",
             1: "49.545403",
-            2: "49.547440", 
+            2: "49.547440",
             3: "49.545797",
             4: "49.546859",
-            5: "49.546540", 
+            5: "49.546540",
             6: "49.546391",
             7: "49.546098",
             8: "49.545780",
-
-
+            9: "49.545461559332814",
+            10: "49.54566647887317",
+            11: "49.54566647887317",
+            12: "49.54639915199749",
+            13: "49.546105039877766",
+            14: "49.54580744534463",
+            15: "49.54563341260934",
+            16: "49.54563341260934",
+            17: "49.54546285992552",
+            18: "49.54544893723172",
+            19: "49.54569780478685",
+            20: "49.54619727641486",
+            21: "49.54647398497707",
+            22: "49.546571441705694",
+            23: "49.54673154876634",
+            24: "49.546829004981134",
+            25: "49.545651",
+            26: "49.545834",
+            27: "49.545923",
+            28: "49.546055",
+            29: "49.546351",
+            30: "49.546395",
+            31: "49.545348"
         };
+
         const imgGPSLon = {
             0: "0.178206",
             1: "0.178290",
@@ -43,102 +69,36 @@
             6: "0.180909",
             7: "0.180740",
             8: "0.179783",
-
+            9: "0.1788363953060801",
+            10: "0.17883999976200549",
+            11: "0.17883999976200549",
+            12: "0.18019987973252724",
+            13: "0.17939789923346677",
+            14: "0.17911358507540612",
+            15: "0.1793040219161561",
+            16: "0.1793040219161561",
+            17: "0.17956956060695647",
+            18: "0.17986460360176934",
+            19: "0.18032326134498994",
+            20: "0.18117620381478494",
+            21: "0.1819272223353472",
+            22: "0.18202646406996606",
+            23: "0.181777018628897",
+            24: "0.18171532782089064",
+            25: "0.179262",
+            26: "0.179238",
+            27: "0.179392",
+            28: "0.179505",
+            29: "0.180216",
+            30: "0.180404",
+            31: "0.178165"
         };
-        cliqué = false;
-        image = localStorage.getItem("image");
-        console.log(localStorage.getItem("image"));
-        image = parseInt(image, 10);
-        console.log(image);
-        coordimglat = imgGPSLat[image];
-        coordimglon = imgGPSLon[image];
-        console.log(coordimglat);
-        console.log(coordimglon);
-
-        var map = L.map('map').setView([49.545845967044144, 0.17996785139144494], 17);
-        L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-            maxZoom: 22,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-        var popup = L.popup();
-
-        function onMapClick(e) {
-            imgTerminés = localStorage.getItem("imageTerminés");
-            imgTerminés = parseInt(imgTerminés, 10);
-            localStorage.setItem("imageTerminés", imgTerminés+1);
-            fini = localStorage.getItem("imageTerminés");
-            fini = parseInt(fini, 10);
-            if (fini == 9){
-                document.getElementById("suivant").style.display = 'none';
-                document.getElementById("mettre-score-dans-bdd").style.display = 'flex';
-                id = localStorage.getItem("user-id");
-                password = localStorage.getItem("user-password");
-                document.getElementById("identifiant").value = id;
-                document.getElementById("mdp").value = password;
-                fini1 = true
-                
-                }
-
-
-            cliqué = true;
-            coordlat = e.latlng.lat;
-            coordlon = e.latlng.lng;
-            distanceimg = Distance(coordimglat, coordimglon, coordlat, coordlon);
-
-            // distance < 1 = 100
-            if (distanceimg < 1.5) {
-                score = 100;
-            }
-            // distance > 1 = -2pts par mètre
-            else {
-                score = Math.max(100 - 2 * (distanceimg - 1), 0); // math.max pour éviter les scores négatifs
-                score = score.toFixed(2);
-            }
-
-            console.log(score);
-
-            function affichageScore() {
-                document.getElementById("affichageScore").innerText = "Score : " + score;
-                if (cliqué) {
-                    document.getElementById("map").style.display = 'none';
-                }
-            }
-
-            function affichageScore1() {
-                document.getElementById("affichageScore1").innerText = "Score : " + score;
-                if (cliqué) {
-                    document.getElementById("map").style.display = 'none';
-                }
-            }
-            affichageScore1();
-            affichageScore();
-            scoreLocal = localStorage.getItem("score");
-                scoreLocal = parseInt(scoreLocal, 10);
-                score = parseInt(score, 10);
-                scoreAdd = scoreLocal+score;
-                localStorage.setItem("score", scoreAdd);
-                console.log(localStorage.getItem("score"));
-
-                fini = localStorage.getItem("imageTerminés");
-                fini = parseInt(fini, 10);
-                if (fini == 9){
-                    scoreFin = localStorage.getItem("score");
-                    scoreFin = parseInt(scoreFin, 10);
-                    scoreFin = (scoreFin/900)*100;
-                    document.getElementById("scoreInput").value = scoreFin;
-                    console.log("fini");
-                };
-
-        }
-
-        map.on('click', onMapClick);
-
-        // Conversion des degrés en radian
-        function convertRad(input) {
+            // Conversion des degrés en radian
+            function convertRad(input) {
             return (Math.PI * input) / 180;
         }
-
+        // Calcul de la distance entre deux points GPS en prennant en compte la courbure de la terre
+        // et les coordonnées GPS des deux points (celui de l'image et celui de l'entrée utilisateur)
         function Distance(lat_a_degre, lon_a_degre, lat_b_degre, lon_b_degre) {
             R = 6378000; // Rayon de la terre en mètre
 
@@ -153,53 +113,157 @@
             ));
             return d;
         }
+        // cliqué sert à savoir si l'utilisateur a cliqué sur la carte pour la cacher
+        cliqué = false;
+        // on récupère le numéro de l'image en cours
+        image = localStorage.getItem("image");
+        // on le convertit en entier
+        image = parseInt(image, 10);
+        // on récupère les coordonnées GPS de l'image en cours
+        coordimglat = imgGPSLat[image];
+        coordimglon = imgGPSLon[image];
+        // on crée la carte leaflet
+        var map = L.map('map').setView([49.545845967044144, 0.17996785139144494], 17);
+        L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 22,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // quand l'utilisateur clique sur la carte :
+        function onMapClick(e) {
+            // on récupère le nombres d'images que l'utilisateur a terminé
+            imgTerminés = localStorage.getItem("imageTerminés");
+            // on le convertit en entier
+            imgTerminés = parseInt(imgTerminés, 10);
+            // on incrémente le nombre d'images terminées
+            localStorage.setItem("imageTerminés", imgTerminés+1);
+            // on récupère le nombre d'images terminées
+            // pour afficher un bouton pour valider le score et l'envoyer à la base de données
+            // si l'utilisateur a terminé toutes les images
+            fini = localStorage.getItem("imageTerminés");
+            fini = parseInt(fini, 10);
+            if (fini == 10){
+                // on cache le bouton suivant
+                document.getElementById("suivant").style.display = 'none';
+                // on affiche le bouton pour valider le score
+                document.getElementById("mettre-score-dans-bdd").style.display = 'flex';
+                // on récupère l'identifiant et le mot de passe de l'utilisateur
+                id = localStorage.getItem("user-id");
+                password = localStorage.getItem("user-password");
+                // on les met dans les champs cachés du formulaire
+                document.getElementById("identifiant").value = id;
+                document.getElementById("mdp").value = password;                
+                }
+            // on passe cliqué à true pour cacher la carte
+            cliqué = true;
+            // on récupère les coordonnées GPS du clic
+            coordlat = e.latlng.lat;
+            coordlon = e.latlng.lng;
+            // on calcule la distance entre les coordonnées GPS de l'image et celles de l'entrée utilisateur
+            distanceimg = Distance(coordimglat, coordimglon, coordlat, coordlon);
+
+            // si la distance < 1.5m, le score vaut 100
+            if (distanceimg < 1.5) {
+                score = 100;
+            }
+            // sinon si la distance > 1.5m on perd 2pts par mètres
+            else {
+                score = Math.max(100 - 2 * (distanceimg - 1), 0); // math.max pour éviter les scores négatifs
+                score = score.toFixed(2); // on arrondit le score à 2 chiffres après la virgule
+            }
+            // on crée la function qui va afficher le score
+            // la fonction affichageScore() va afficher le score dans le cas où l'utilisateur a terminé toutes les images
+            function affichageScore() {
+                document.getElementById("affichageScore").innerText = "Score : " + score;
+                // en même temps on cache la carte si l'utilisateur a cliqué
+                if (cliqué) {
+                    document.getElementById("map").style.display = 'none';
+                }
+            }
+            // la fonction affichageScore1() va afficher le score dans le cas où l'utilisateur n'a pas terminé toutes les images
+            function affichageScore1() {
+                document.getElementById("affichageScore1").innerText = "Score : " + score;
+                // en même temps on cache la carte si l'utilisateur a cliqué
+                if (cliqué) {
+                    document.getElementById("map").style.display = 'none';
+                }
+            }
+            // on appelle la fonction affichageScore1() et affichageScore()
+            affichageScore1();
+            affichageScore();
+            // on récupère le score de l'utilisateur depuis le cookie score
+            scoreLocal = localStorage.getItem("score");
+            // on convertit le score en entier
+            scoreLocal = parseInt(scoreLocal, 10);
+            // on convertit le score de l'image actuelle en entier
+            score = parseInt(score, 10);
+            // on ajoute le score de l'image actuelle au score total
+            scoreAdd = scoreLocal+score;
+            // on met à jour le score total dans le cookie
+            localStorage.setItem("score", scoreAdd);
+            // on récupère le nombre d'images terminées
+            fini = localStorage.getItem("imageTerminés");
+            // on convertit le nombre d'images terminées en entier
+            fini = parseInt(fini, 10);
+            // si l'utilisateur a terminé toutes les images(il y en a 32) mais on peut adapter 
+            // la longeur en changeant la valeur à vérifier :
+            if (fini == 10){
+                // on récupère le score total
+                scoreFin = localStorage.getItem("score");
+                // on convertit le score total en entier
+                scoreFin = parseInt(scoreFin, 10);
+                // on met le score total sur 100 pour avoir une note sur 100
+                scoreFin = (scoreFin/1000)*100;
+                // on arrondit le score à 2 chiffres après la virgule
+                scoreFin = scoreFin.toFixed(2);
+                // on rempli le champ caché du formulaire avec le score total
+                document.getElementById("scoreInput").value = scoreFin;
+            };
+        }   
+        // on appelle la fontion qui détecte un clic sur la carte
+        map.on('click', onMapClick);
     </script>
+    <div class="container-form">
+    <!-- on crée un formulaire pour envoyer les données (via la méthode POST) utiles au classement dans la base de données-->
     <form id="mettre-score-dans-bdd" action="updateScore.php" method="POST" style="display: none;">
+        <!-- on affiche le score de l'utilisateur -->
         <p id="affichageScore">Score : 0</p>
+        <!-- on crée des champs cachés pour envoyer les données -->
         <input type="hidden" name="score" id="scoreInput" value="">
         <input type="hidden" name="identifiant" id="identifiant" >
         <input type="hidden" name="mot-de-passe"  id="mdp"  >
         
         <script>
+            // au charger de la page :
             document.addEventListener("DOMContentLoaded", function() {
 
             });
-  
+            // on crée une fonction qui va permettre de passer à l'image suivante
             function suivant() {
                 var image = localStorage.getItem("image");
                 image = parseInt(image, 10);
                 localStorage.setItem("image", image+1);
-                window.location.href='image.php';
-            }
-
-
-            function updateScore() {
-
-                event.preventDefault();
-                document.querySelector("form").submit();
-
-                var image = localStorage.getItem("image");
-                image = parseInt(image, 10);
-                localStorage.setItem("image", image+1);
-
-                if (fini1){
-                    scoreFin = localStorage.getItem("score");
-                    scoreFin = scoreFin.toFixed(2);
-                    document.getElementById("scoreInput").value = scoreFin;
-                    console.log("fini");
-                };
-                
-
+                window.location.href='image.html';
             }
         </script>
-        <input type="submit" value="Valider" onclick="updateScore()">
+        <!-- on crée un bouton pour valider le score -->
+        <input  class="suivant-valider" type="submit" value="Valider">
     </form>
     <div id="suivant" style="display: flex;">
         <p id="affichageScore1">Score : 0</p>
-        <button onclick="suivant()">Suivant</button>
+            <!-- on crée un bouton pour passer à l'image suivante -->
+        <button class="suivant-valider" onclick="suivant()">Suivant</button>
     </div>
 </div>
-
-
-
+<div class="container" id="img-Carte">
+<script>
+    // affiche l'image à trouver dans la div img-Carte
+    imgSource = localStorage.getItem("nomImg");
+    img = document.createElement("img");
+    img.className = "img-Carte";
+    img.src = imgSource;
+    document.getElementById('img-Carte').appendChild(img);
+</script>
+</div>
+</div>
 </html>

@@ -1,9 +1,86 @@
 <!DOCTYPE html>
 <html>
-    <head><title>image</title></head>
+    <head>
+        <meta charset="UTF-8">
+        <title>image</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
     <body>
-        <p>où se trouve cet endroit</p>
-        <img class="img-chercher" src="gymnase.webp">
-        <a href="carte.html"><button id="afficherCarte" class="aff-carte">afficher la carte pour donner une réponse</button></a>
+        <header>
+        <button class="btn-logout" onclick="window.location='logout.php';" >déconnexion</button>
+        <div class="h1-header">
+            <h1 class="titre-header" >geoguessr</h1>
+            </div>
+        </header>
+        <div class="container" style="position: relative; top: 25rem;">
+            <progress></progress>
+        </div>
+        <script>
+            // fonction qui permet de générer un nombre aléatoire
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            };
+            // tableau contenant le chemin des images
+            const images = {
+                0: "images/gymnase.webp",
+                1: "images/skatepark.webp",
+                2: "images/photojp.webp",
+                3: "images/D.webp",
+                4: "images/18.webp",
+                5: "images/bassin-poissons.webp",
+                6: "images/CantineRANG.webp",
+                7: "images/cour-interieure.webp",
+                8: "images/CoursD.webp",
+                9: "images/skatepark3.webp",
+                10: "images/skatepark4.webp",
+                11: "images/skatepark2.webp",
+                12: "images/cantine-ext.webp",
+                13: "images/escaliers-ext-D.webp",
+                14: "images/cour7-D.webp",
+                15: "images/cour6-D.webp",
+                16: "images/cour4-D.webp",
+                17: "images/cour5-D.webp",
+                18: "images/cour3-D.webp",
+                19: "images/cour2-D.webp",
+                20: "images/arbres.webp",
+                21: "images/point-de-rassemblement.webp",
+                22: "images/cour-E.webp",
+                23: "images/fin-A.webp",
+                24: "images/tables-A.webp",
+                25: "images/ImageJ1.webp",
+                26: "images/ImageJ2.webp",
+                27: "images/ImageJ3.webp",
+                28: "images/ImageJ4.webp",
+                29: "images/ImageJ5.webp",
+                30: "images/ImageJ6.webp",
+                31: "images/ImageJ7.webp"
+};
+
+            document.addEventListener("DOMContentLoaded", function() {
+                // on génère le nombre aléatoire
+                imageAléatoire = getRandomInt(32);
+                // on récupère les numéros des images déjà faites qu'on stocke dans un tableau
+                let nombresFaits = JSON.parse(localStorage.getItem("nombreAléatoire") || "[]"); 
+                // on parcours le tableau pour vérifier si l'image a déjà été faite
+                while (nombresFaits.includes(imageAléatoire)) {
+                // tant que l'image a déjà été faite, on génère un nouveau nombre aléatoire
+                imageAléatoire = getRandomInt(32);
+                };   
+
+                // on ajoute le nombre aléatoire qui n'a pas déjà été utilisé dans le tableau
+                nombresFaits.push(imageAléatoire);
+                // on met à jour le tableau dans le cookie
+                localStorage.setItem("nombreAléatoire", JSON.stringify(nombresFaits));  
+                
+                // on stocke le numéro de l'image dans un cookie pour le récupérer dans la page 
+                // carte pour en obtenir les coordonnées de l'image
+                localStorage.setItem("image", imageAléatoire);
+                localStorage.setItem("nomImg", images[imageAléatoire]);
+                setTimeout(() => {
+                    window.location.href = "carte.html";
+                }, 500);
+
+            });
+        </script>
     </body>
 </html>
